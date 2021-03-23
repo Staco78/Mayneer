@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Fichiers sources\Blocks">
+      <UniqueIdentifier>{e83455a9-d5ab-448c-9e85-2436ae35a88c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête\Blocks">
+      <UniqueIdentifier>{9de25521-c29b-47e8-9310-e59d915d69e9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -24,6 +30,12 @@
     <ClCompile Include="Player.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
+    <ClCompile Include="Blocks\Block1.cpp">
+      <Filter>Fichiers sources\Blocks</Filter>
+    </ClCompile>
+    <ClCompile Include="Blocks\Block.cpp">
+      <Filter>Fichiers sources\Blocks</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -32,10 +44,11 @@
     <ClInclude Include="Player.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="image.png">
-      <Filter>Fichiers de ressources</Filter>
-    </Image>
+    <ClInclude Include="Blocks\Block1.h">
+      <Filter>Fichiers d%27en-tête\Blocks</Filter>
+    </ClInclude>
+    <ClInclude Include="Blocks\Block.h">
+      <Filter>Fichiers d%27en-tête\Blocks</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
