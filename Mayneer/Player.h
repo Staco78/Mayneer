@@ -2,7 +2,10 @@
 #include <SFML/Graphics.hpp> 
 #include <iostream>
 #include <string>
-#include <cstdlib>
+#include <vector>
+#include <math.h>
+
+#include "Blocks/Block.h"
 
 class Player :
     public sf::RectangleShape
@@ -11,7 +14,7 @@ public:
     Player(sf::Vector2f pos = sf::Vector2f(0, 0));
     void moveRight();
     void moveLeft();
-    void update();
+    void update(std::vector<Block>* blocks);
     void fall();
     void jump();
     void idle();
@@ -20,8 +23,11 @@ public:
     sf::Vector2f getPixelPosition();
 
 private:
-    sf::Vector2f move(sf::Vector2f movement);
-    sf::Vector2f move(float x, float y);
+    sf::Vector2f move(sf::Vector2f movement, std::vector<Block>* blocks);
+    bool collisionRight(float V, std::vector<Block>* block);
+    bool collisionLeft(float V, std::vector<Block>* block);
+    bool collisionUp(float V, std::vector<Block>* block);
+    bool collisionDown(float V, std::vector<Block>* block);
 
     sf::Vector2f pos;
     sf::Texture actualTexture;
@@ -34,9 +40,14 @@ private:
     sf::Image textureRun3;
     sf::Image textureRun4;
     sf::Image textureRun5;
+    sf::Image textureJump0;
+    sf::Image textureJump1;
+    sf::Image textureFall0;
+    sf::Image textureFall1;
 
     std::string nTexture = "i0";
     int animationClock = 0;
 
     sf::Vector2f speed;
+
 };
