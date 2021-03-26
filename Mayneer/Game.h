@@ -3,6 +3,7 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <vector>
+#include <SFML/Graphics/Font.hpp>
 
 #include "Player.h"
 #include "Blocks/Block1.h"

@@ -6,7 +6,7 @@ Game::Game(int w, int h, sf::Uint32 style)
 {
     windowVideoMode = sf::VideoMode(w, h);
     windowStyle = style;
-    player = new Player;
+    player = new Player(sf::Vector2f(0, 20));
 }
 
 void Game::start()
@@ -17,11 +17,18 @@ void Game::start()
     sf::View view(sf::Vector2f(window.getSize().x / 2, window.getSize().y / 2), sf::Vector2f(window.getSize()));
 
 
-    std::vector<Block1> v;
+    std::vector<Block> v;
     for (int i = 0; i < 1000; i++) {
-        v.push_back(Block1(&textureBlock1));
-        v.back().setPosition(i * 10, 0);
+        v.push_back(Block1(&textureBlock1, sf::Vector2i(i, 1)));
     }
+    for (int i = 0; i < 20; i++) {
+        v.push_back(Block1(&textureBlock1, sf::Vector2i(i + 10, i)));
+    }
+    
+
+    float fps = 0;
+    
+    sf::Clock fpsClock;
 
     while (window.isOpen())
     {
@@ -51,8 +58,8 @@ void Game::start()
             }
         }
 
-        player->fall();
-        player->update();
+        player->fall(&v);
+        player->update(&v);
 
         view.setCenter(player->getPixelPosition());
         window.setView(view);
@@ -62,6 +69,11 @@ void Game::start()
         }
         window.draw(*player);
         window.display();
+
+        fps = 1 / fpsClock.getElapsedTime().asSeconds();
+        cout << fps << "\t";
+        fpsClock.restart();
+        
     }
 
     delete player;
