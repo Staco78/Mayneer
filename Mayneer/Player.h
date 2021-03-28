@@ -6,25 +6,28 @@
 #include <math.h>
 
 #include "Blocks/Block.h"
+#include "Utils.h"
 
 class Player :
     public sf::RectangleShape
 {
 public:
-    Player(sf::Vector2f pos = sf::Vector2f(0, 0));
+    sf::RenderWindow* w;
+    Player(sf::RenderWindow* w,sf::Vector2f pos = sf::Vector2f(0, 0), std::vector<Block>* blocks = 0);
     void moveRight();
     void moveLeft();
-    void update(std::vector<Block>* blocks);
-    void fall(std::vector<Block>* blocks);
+    void update();
+    void fall();
     void jump();
     void idle();
     void setPosition(sf::Vector2f newPos);
     sf::Vector2f getPosition();
     sf::Vector2f getPixelPosition();
+    sf::FloatRect getBounds();
 
 private:
-    sf::Vector2f move(sf::Vector2f movement, std::vector<Block>* blocks);
-    bool canFall(std::vector<Block>* blocks);
+    sf::Vector2f move();
+    bool canFall();
 
     sf::Vector2f pos;
     sf::Texture actualTexture;
@@ -46,5 +49,5 @@ private:
     int animationClock = 0;
 
     sf::Vector2f speed;
-
+    std::vector<Block>* blocks;
 };

@@ -6,7 +6,6 @@ Game::Game(int w, int h, sf::Uint32 style)
 {
     windowVideoMode = sf::VideoMode(w, h);
     windowStyle = style;
-    player = new Player(sf::Vector2f(0, 20));
 }
 
 void Game::start()
@@ -15,14 +14,20 @@ void Game::start()
     window.setFramerateLimit(60);
 
     sf::View view(sf::Vector2f(window.getSize().x / 2, window.getSize().y / 2), sf::Vector2f(window.getSize()));
+    player = new Player(&window, sf::Vector2f(0, 20), &visibleBlocks);
 
 
-    std::vector<Block> v;
     for (int i = 0; i < 1000; i++) {
-        v.push_back(Block1(&textureBlock1, sf::Vector2i(i, 1)));
+        visibleBlocks.push_back(Block1(&textureBlock1, sf::Vector2i(i, 1)));
     }
     for (int i = 0; i < 20; i++) {
-        v.push_back(Block1(&textureBlock1, sf::Vector2i(i + 10, i)));
+        visibleBlocks.push_back(Block1(&textureBlock1, sf::Vector2i(i + 10, i)));
+    }
+    for (int i = 0; i < 3; i++) {
+        visibleBlocks.push_back(Block1(&textureBlock1, sf::Vector2i(-20, i)));
+    }
+    for (int i = 0; i < 5; i++) {
+        visibleBlocks.push_back(Block1(&textureBlock1, sf::Vector2i(-21, i)));
     }
     
 
@@ -58,15 +63,15 @@ void Game::start()
             }
         }
 
-        player->fall(&v);
-        player->update(&v);
+        window.clear();
 
         view.setCenter(player->getPixelPosition());
         window.setView(view);
-        window.clear();
-        for (int i = 0; i < v.size(); i++) {
-            window.draw(v[i]);
+        for (int i = 0; i < visibleBlocks.size(); i++) {
+            window.draw(visibleBlocks[i]);
         }
+        player->update();
+
         window.draw(*player);
         window.display();
 

@@ -20,4 +20,5 @@ private:
 	Player* player = 0;
 
 	sf::Texture textureBlock1;
+	std::vector<Block> visibleBlocks;
 };

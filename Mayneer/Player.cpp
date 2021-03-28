@@ -4,7 +4,7 @@ double around(double value) {
 	return floor(value + 0.5);
 }
 
-Player::Player(sf::Vector2f pos) : sf::RectangleShape(sf::Vector2f(60, 111)) {
+Player::Player(sf::RenderWindow* w, sf::Vector2f pos, std::vector<Block>* blocks) : sf::RectangleShape(sf::Vector2f(60, 111)) {
 	setPosition(pos);
 	setOrigin(getSize().x / 2, getSize().y);
 	textureIddle0.loadFromFile("assets/player/idle-00.png");
@@ -21,8 +21,11 @@ Player::Player(sf::Vector2f pos) : sf::RectangleShape(sf::Vector2f(60, 111)) {
 	textureFall0.loadFromFile("assets/player/fall-00.png");
 	textureFall1.loadFromFile("assets/player/fall-01.png");
 	actualTexture.loadFromImage(textureIddle0);
-	setTextureRect(sf::IntRect(15, 0, 20, 37));
+	setTextureRect(sf::IntRect(12, 0, 26, 37));
 	setTexture(&actualTexture);
+	Player::blocks = blocks;
+
+	Player::w = w;
 }
 
 void Player::setPosition(sf::Vector2f newPos) {
@@ -36,23 +39,52 @@ sf::Vector2f Player::getPosition() { return pos; }
 sf::Vector2f Player::getPixelPosition() { return sf::RectangleShape::getPosition(); }
 
 
-sf::Vector2f Player::move(sf::Vector2f movement, std::vector<Block>* blocks) {
-	bool collision = false;
+sf::Vector2f Player::move() {
+	//bool collision = false;
+	//for (int i = 0; i < blocks->size(); i++) {
+	//	Block* block = &blocks->at(i);
+	//	if (getGlobalBounds().intersects(block->getGlobalBounds())) {
+	//		if (pos.y < block->getPosition().y && (getPixelPosition().x >= block->getGlobalBounds().left && getPixelPosition().x <= block->getGlobalBounds().left + block->getGlobalBounds().width)) {
+	//			pos.y = block->getPosition().y;
+	//			speed.y = 0;
+	//		}
+	//		collision = true;
+	//	}
+	//}
+	////std::cout << collision << std::endl;
+	//if (!collision)
+	//	setPosition(getPosition() + movement);
+	//else {
+	//	setPosition(getPosition() + -speed);
+	//	speed = sf::Vector2f();
+	//}
+	//return getPosition();
+
+
+	bool collisionX = false;
+	bool collisionY = false;
+	sf::FloatRect playerRectX = sf::FloatRect(getBounds().getPosition() + sf::Vector2f(speed.x, 0), getBounds().getSize());
+	sf::FloatRect playerRectY = sf::FloatRect(getBounds().getPosition() + sf::Vector2f(0, speed.y), getBounds().getSize());
+	sf::FloatRect blockRect;
 	for (int i = 0; i < blocks->size(); i++) {
-		Block* block = &blocks->at(i);
-		if (getGlobalBounds().intersects(block->getGlobalBounds())) {
-			if (pos.y < block->getPosition().y) {
-				pos.y = block->getPosition().y;
-				speed.y = 0;
+			Block* block = &blocks->at(i);
+			blockRect = block->getBounds();
+
+			if (playerRectX.intersects(blockRect)) {
+				collisionX = true;
 			}
-			collision = true;
-		}
+			if (playerRectY.intersects(blockRect)) {
+				collisionY = true;
+				if (blockRect.top < getBounds().top + getBounds().height)
+					setPosition(sf::Vector2f(getPosition().x, blockRect.top + 0.014));
+			}
 	}
-	//std::cout << collision << std::endl;
-	if (!collision)
-		setPosition(getPosition() + movement);
-	else
-		//speed = sf::Vector2f(0, 0);
+	if (!collisionX) 
+		setPosition(getPosition() + sf::Vector2f(speed.x, 0));
+
+	if (!collisionY) 
+		setPosition(getPosition() + sf::Vector2f(0, speed.y));
+
 	return getPosition();
 }
 
@@ -69,8 +101,8 @@ void Player::idle() {
 	speed.x = 0;
 }
 
-void Player::update(std::vector<Block>* blocks) {
-	move(speed, blocks);
+void Player::update() {
+	fall();
 	animationClock++;
 	if (speed.y > 0) {
 		if (nTexture != "j0" && nTexture != "j1" && nTexture != "j2" && nTexture != "j3") {
@@ -141,8 +173,7 @@ void Player::update(std::vector<Block>* blocks) {
 				nTexture = "r0";
 			}
 		}
-	} 
-	
+	} 	
 	else {
 		if (nTexture != "i0" && nTexture != "i1" && nTexture != "i2") {
 			animationClock = 0;
@@ -173,25 +204,26 @@ void Player::update(std::vector<Block>* blocks) {
 		//left
 		setScale(-1.f, 1.f);
 	}
-	sf::RectangleShape::setPosition(pos.x * 60, pos.y * -60);
+	move();
+	sf::RectangleShape::setPosition(Utils::blockToPixelPosition(pos));
 	std::cout << pos.x << ":" << pos.y << "\t" << speed.x << ":" << speed.y << "\n";
 }
 
-void Player::fall(std::vector<Block>* blocks) {
-	
-	if (canFall(blocks))
+void Player::fall() {
+	std::cout << canFall() << "\t";
+	if (canFall())
 		speed.y += -0.01;
 	else if (speed.y < 0)
 		speed.y = 0;
 }
 
-bool Player::canFall(std::vector<Block>* blocks) {
+bool Player::canFall() {
 	if (pos.y == 0)
 		return false;
 	for (int i = 0; i < blocks->size(); i++) {
 		Block* block = &blocks->at(i);
 		if (around(pos.x) == block->getPosition().x && around(pos.y) == block->getPosition().y || around(pos.y) - 1 == block->getPosition().y) {
-			if (getPosition().y == block->getPosition().y)
+			if (getPosition().y >= block->getPosition().y && getPosition().y <= block->getPosition().y + 0.034)
 				return false;
 		}
 	}
@@ -201,4 +233,8 @@ bool Player::canFall(std::vector<Block>* blocks) {
 void Player::jump() {
 	if (speed.y == 0)
 		speed.y = 0.2;
+}
+
+sf::FloatRect Player::getBounds() {
+	return sf::FloatRect(Utils::pixelToBlockPosition(getGlobalBounds().getPosition()), sf::Vector2f(getGlobalBounds().getSize().x / Utils::blockSize, getGlobalBounds().getSize().y / -Utils::blockSize));
 }

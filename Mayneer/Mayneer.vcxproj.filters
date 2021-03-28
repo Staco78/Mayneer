@@ -36,6 +36,9 @@
     <ClCompile Include="Blocks\Block.cpp">
       <Filter>Fichiers sources\Blocks</Filter>
     </ClCompile>
+    <ClCompile Include="Utils.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -49,6 +52,9 @@
     </ClInclude>
     <ClInclude Include="Blocks\Block.h">
       <Filter>Fichiers d%27en-tête\Blocks</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils.h">
+      <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
