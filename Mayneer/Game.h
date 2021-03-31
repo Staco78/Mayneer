@@ -3,22 +3,25 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <vector>
-#include <SFML/Graphics/Font.hpp>
 
 #include "Player.h"
 #include "Blocks/Block1.h"
+#include "Textures.h"
+#include "Map.h"
 
 class Game
 {
 public:
 	Game(int w, int h, sf::Uint32 style);
 	void start();
-	void initTexture();
+	void loadTexture();
 private:
 	sf::VideoMode windowVideoMode;
 	sf::Uint32 windowStyle;
-	Player* player = 0;
+	Player player;
+	Map map;
 
-	sf::Texture textureBlock1;
-	std::vector<Block> visibleBlocks;
+
+	std::vector<Blocks::Block> visibleBlocks;
+	Textures textures;
 };

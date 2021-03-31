@@ -9,3 +9,4 @@ namespace Utils {
 		return sf::Vector2f(pos.x / blockSize, pos.y / -blockSize);
 	}
 }
+

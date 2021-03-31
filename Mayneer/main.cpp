@@ -4,9 +4,8 @@
 using namespace std;
 
 int main() {
-    
     Game game(500, 500, sf::Style::Default);
-    game.initTexture();
+    game.loadTexture();
     game.start();
     #ifdef NDEBUG
     #else

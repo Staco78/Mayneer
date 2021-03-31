@@ -1,6 +1,7 @@
 #pragma once
 
 #include <SFML/System.hpp>
+#include <string>
 
 namespace Utils {
 	static int blockSize = 60;
